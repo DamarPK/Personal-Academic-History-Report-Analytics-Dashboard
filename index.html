@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arsip Rapor Personal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Tombol buka nav (muncul cuma pas nav lagi ditutup) -->
+  <button id="navOpenBtn" class="icon-btn floating" aria-label="Buka menu">☰</button>
+
+  <!-- NAVBAR / SIDEBAR NAVIGASI -->
+  <nav id="mainNav">
+    <div class="nav-head">
+      <div class="brand-title">📜 Dashboard</div>
+      <button id="navCloseBtn" class="icon-btn" aria-label="Tutup menu">✕</button>
+    </div>
+    <div class="brand-sub">Arsip Akademik</div>
+    <ul class="nav-list" id="navList"></ul>
+  </nav>
+
+  <!-- KONTEN UTAMA (di-render dinamis lewat JS) -->
+  <div class="wrap">
+    <div id="pageContent">
+      <p class="empty-state">Memuat data…</p>
+    </div>
+  </div>
+
+  <!-- MODAL DETAIL -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+      <button class="modal-close" id="modalClose">✕ tutup</button>
+      <h3 id="modalTitle"></h3>
+      <div class="modal-cat" id="modalCat"></div>
+      <div class="modal-chart"><svg id="modalChart"></svg></div>
+      <table class="modal-table" id="modalTable"></table>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
