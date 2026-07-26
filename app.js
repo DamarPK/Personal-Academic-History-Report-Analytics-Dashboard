@@ -32,22 +32,43 @@ fetch('data.json')
   });
 
 function buildNav(){
-  const icons = { home: '🏠' };
-  const labels = { home: 'Home' };
-  const order = ['home', 'sd', 'smp', 'sma', 'kuliah'];
+  const order = ['home', 'tk', 'sd', 'smp', 'sma', 'kuliah'];
   navList.innerHTML = order.map(key => {
-    const icon = key === 'home' ? icons.home : DATA.schools[key].icon;
-    const label = key === 'home' ? labels.home : DATA.schools[key].name;
-    return `<li class="nav-item" data-tab="${key}" onclick="switchTab('${key}', this)">${icon} ${label}</li>`;
+    if (key === 'home') {
+      return `<li class="nav-item" data-tab="home" onclick="switchTab('home', this)">🏠 Home</li>`;
+    }
+    const s = DATA.schools[key];
+    if (s.isParent && s.children) {
+      const childrenHtml = s.children.map(ck => {
+        const cs = DATA.schools[ck];
+        return `<li class="nav-item nav-sub" data-tab="${ck}" onclick="switchTab('${ck}', this)">↳ ${cs.name}</li>`;
+      }).join('');
+      return `
+        <li class="nav-parent">
+          <div class="nav-item nav-parent-row" data-tab="${key}" onclick="switchTab('${key}', this)">
+            <span class="nav-toggle-arrow" onclick="event.stopPropagation(); toggleSubmenu(this)">▾</span>
+            <span>${s.icon} ${s.name}</span>
+          </div>
+          <ul class="nav-submenu">${childrenHtml}</ul>
+        </li>`;
+    }
+    return `<li class="nav-item" data-tab="${key}" onclick="switchTab('${key}', this)">${s.icon} ${s.name}</li>`;
   }).join('');
+}
+
+function toggleSubmenu(arrowEl){
+  const submenu = arrowEl.closest('.nav-parent').querySelector('.nav-submenu');
+  submenu.classList.toggle('collapsed');
+  arrowEl.textContent = submenu.classList.contains('collapsed') ? '▸' : '▾';
 }
 
 // ---------- render: HOME ----------
 function renderHome(){
   const sma = DATA.schools.sma;
   const last = sma.overallAvg[sma.overallAvg.length - 1];
-  const totalReady = Object.values(DATA.schools).filter(s => s.ready).length;
-  const totalSchools = Object.keys(DATA.schools).length;
+  const visibleSchools = Object.entries(DATA.schools).filter(([, s]) => !s.hidden);
+  const totalReady = visibleSchools.filter(([, s]) => s.ready).length;
+  const totalSchools = visibleSchools.length;
 
   pageContent.innerHTML = `
     <header>
@@ -68,10 +89,10 @@ function renderHome(){
     <div class="card">
       <h2><span class="idx">01</span> Daftar Jenjang</h2>
       <div class="grid">
-        ${Object.entries(DATA.schools).map(([key, s]) => `
+        ${visibleSchools.map(([key, s]) => `
           <div class="subj-card" data-goto="${key}">
             <div class="subj-top"><div class="subj-name">${s.icon} ${s.name}</div></div>
-            <div class="subj-cat">${s.ready ? (s.subjects.length + ' mapel · ' + s.overallAvg.length + ' semester') : 'Belum ada data'}</div>
+            <div class="subj-cat">${schoolCardSubtitle(s)}</div>
           </div>
         `).join('')}
       </div>
@@ -82,7 +103,55 @@ function renderHome(){
   });
 }
 
-// ---------- render: SEGERA HADIR ----------
+function schoolCardSubtitle(s){
+  if (!s.ready) return 'Belum ada data';
+  if (s.type === 'tk') return `${s.categories.length} aspek · checklist pencapaian`;
+  return `${s.subjects.length} mapel · ${s.overallAvg.length} periode`;
+}
+
+// ---------- render: TK (checklist pencapaian, bukan nilai angka) ----------
+function renderTK(){
+  const tk = DATA.schools.tk;
+  pageContent.innerHTML = `
+    <header>
+      <div class="title-block">
+        <div class="eyebrow">${tk.name} · ${tk.periods.join(' & ')}</div>
+        <h1>Checklist Pencapaian</h1>
+        <div class="subtitle">Rekap capaian per aspek. Data TK berupa checklist "Terlampaui", bukan nilai angka, jadi ditampilkan sebagai daftar centang.</div>
+      </div>
+    </header>
+
+    <div class="card">
+      <h2><span class="idx">01</span> Kehadiran (${tk.attendance.period})</h2>
+      <div class="stats-grid">
+        <div class="stat-box"><div class="stat-val">${tk.attendance.sakit}</div><div class="stat-lbl">Sakit</div></div>
+        <div class="stat-box"><div class="stat-val">${tk.attendance.izin}</div><div class="stat-lbl">Izin</div></div>
+        <div class="stat-box"><div class="stat-val">${tk.attendance.tanpaKeterangan}</div><div class="stat-lbl">Tanpa Keterangan</div></div>
+        <div class="stat-box"><div class="stat-val">${tk.attendance.terlambat}</div><div class="stat-lbl">Terlambat</div></div>
+      </div>
+    </div>
+
+    ${tk.categories.map((cat, i) => `
+      <div class="card">
+        <h2><span class="idx">${String(i + 2).padStart(2, '0')}</span> ${cat.name}</h2>
+        <table class="check-table">
+          <thead>
+            <tr><th></th><th>${tk.periods[0]}</th><th>${tk.periods[1] || ''}</th></tr>
+          </thead>
+          <tbody>
+            ${cat.items.map(item => `
+              <tr>
+                <td class="check-label">${item}</td>
+                <td class="check-cell"><span class="check-badge">✔ Terlampaui</span></td>
+                <td class="check-cell"><span class="check-badge">✔ Terlampaui</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `).join('')}
+  `;
+}
 function renderComingSoon(key){
   const s = DATA.schools[key];
   pageContent.innerHTML = `
@@ -212,6 +281,7 @@ function switchTab(key, elem){
   if (navEl) navEl.classList.add('active');
 
   if (key === 'home') renderHome();
+  else if (key === 'tk') renderTK();
   else if (DATA.schools[key] && DATA.schools[key].ready) renderSchool(key);
   else renderComingSoon(key);
 
