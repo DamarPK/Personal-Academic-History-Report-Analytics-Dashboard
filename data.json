@@ -7,10 +7,48 @@
     "Keterampilan": "#9C9184"
   },
   "schools": {
+    "tk": {
+      "name": "TK",
+      "icon": "🧸",
+      "ready": true,
+      "type": "tk",
+      "periods": ["Semester I", "Semester II"],
+      "categories": [
+        {
+          "name": "Bahasa Inggris",
+          "items": ["Salam / Greeting", "Anggota badan", "Anggota keluarga", "Nama buah-buahan", "Perintah sederhana", "Berhitung 1-10", "Menyanyi", "Kosa kata", "Nama sayur-sayuran", "Nama binatang", "Bagian-bagian tubuh"]
+        },
+        {
+          "name": "Bahasa Arab",
+          "items": ["Salam", "Berhitung 1-10", "Menyanyi", "Kosa kata"]
+        },
+        {
+          "name": "Life Skill",
+          "items": ["Adab makan dan minum", "Adab berdoa", "Adab bermain", "Adab bertamu", "Adab masuk kamar mandi", "Adab masuk masjid"]
+        },
+        {
+          "name": "Renang (Pengenalan Air)",
+          "items": ["Berani turun ke air", "Berani menyelamkan wajah", "Berani menyelamkan badan", "Mengambil napas", "Gerak kaki", "Gerak tangan", "Koordinasi keseluruhan"]
+        },
+        {
+          "name": "Komputer",
+          "items": ["Mengenal bagian (CPU, mouse)", "Dapat memegang mouse", "Mengetahui manfaat komputer", "Dapat mengarahkan kursor"]
+        }
+      ],
+      "attendance": {
+        "period": "Semester I",
+        "sakit": "8 Hari",
+        "izin": "-",
+        "tanpaKeterangan": "-",
+        "terlambat": "-"
+      }
+    },
     "sd": {
-      "name": "SDN Kreo 04 / SDN 1 BOJONGSARI",
+      "name": "SD (Gabungan)",
       "icon": "🧒",
       "ready": true,
+      "isParent": true,
+      "children": ["sd_kreo", "sd_bojongsari"],
       "periods": ["Kelas 1", "Kelas 2", "Kelas 3 Sem 1", "Kelas 3 Sem 2", "Kelas 4", "Kelas 5 Sem 1 (Kreo 04)", "Kelas 5 Sem 2 (Bojongsari 1)"],
       "overallAvg": [91.5, 83.5, 83.1, 87.7, 79.6, 79.1, 76.3],
       "subjects": [
@@ -25,6 +63,46 @@
         {"name": "Mulok Budi Pekerti", "cat": "Keterampilan", "vals": [95,87,85,95,null,null,null]},
         {"name": "Mulok Bahasa Inggris", "cat": "Bahasa", "vals": [98,86,86,96,null,null,null]},
         {"name": "Mulok Bahasa Jawa", "cat": "Bahasa", "vals": [null,null,null,null,74,76,69]}
+      ]
+    },
+    "sd_kreo": {
+      "name": "SDN Kreo 04",
+      "icon": "🧒",
+      "ready": true,
+      "hidden": true,
+      "periods": ["Kelas 1", "Kelas 2", "Kelas 3 Sem 1", "Kelas 3 Sem 2", "Kelas 4", "Kelas 5 Sem 1"],
+      "overallAvg": [91.5, 83.5, 83.1, 87.7, 79.6, 79.1],
+      "subjects": [
+        {"name": "Pendidikan Agama", "cat": "Agama", "vals": [80,78,83,95,89,81]},
+        {"name": "PPKn", "cat": "Sosial", "vals": [95,88,86,90,null,76]},
+        {"name": "Bahasa Indonesia", "cat": "Bahasa", "vals": [96,81,84,84,null,82]},
+        {"name": "Matematika", "cat": "Sains", "vals": [94,92,80,80,78,82]},
+        {"name": "IPA", "cat": "Sains", "vals": [92,74,81,80,73,80]},
+        {"name": "IPS", "cat": "Sosial", "vals": [85,90,80,89,81,79]},
+        {"name": "Seni Budaya (SBdP)", "cat": "Keterampilan", "vals": [85,84,84,86,82,78]},
+        {"name": "PJOK", "cat": "Keterampilan", "vals": [95,75,82,82,80,78]},
+        {"name": "Mulok Budi Pekerti", "cat": "Keterampilan", "vals": [95,87,85,95,null,null]},
+        {"name": "Mulok Bahasa Inggris", "cat": "Bahasa", "vals": [98,86,86,96,null,null]},
+        {"name": "Mulok Bahasa Jawa", "cat": "Bahasa", "vals": [null,null,null,null,74,76]}
+      ]
+    },
+    "sd_bojongsari": {
+      "name": "SDN 1 BOJONGSARI",
+      "icon": "🧒",
+      "ready": true,
+      "hidden": true,
+      "periods": ["Kelas 5 Sem 2"],
+      "overallAvg": [76.3],
+      "subjects": [
+        {"name": "Pendidikan Agama", "cat": "Agama", "vals": [79]},
+        {"name": "PPKn", "cat": "Sosial", "vals": [76]},
+        {"name": "Bahasa Indonesia", "cat": "Bahasa", "vals": [77]},
+        {"name": "Matematika", "cat": "Sains", "vals": [66]},
+        {"name": "IPA", "cat": "Sains", "vals": [82]},
+        {"name": "IPS", "cat": "Sosial", "vals": [76]},
+        {"name": "Seni Budaya (SBdP)", "cat": "Keterampilan", "vals": [85]},
+        {"name": "PJOK", "cat": "Keterampilan", "vals": [77]},
+        {"name": "Mulok Bahasa Jawa", "cat": "Bahasa", "vals": [69]}
       ]
     },
     "smp": {
@@ -89,4 +167,4 @@
       "ready": false
     }
   }
-}
+        }
